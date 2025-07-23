@@ -1,0 +1,45 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gemini AI Web App</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <h1>🌿 Gemini AI Assistant</h1>
+    <p class="subtitle">Ask anything and get instant AI-powered responses.</p>
+    
+    <form id="chat-form">
+      <textarea id="prompt" placeholder="Type your message here..." required></textarea>
+      <button type="submit">Ask Gemini</button>
+    </form>
+
+    <div class="response-box" id="response-box">
+      <h3>Response:</h3>
+      <div id="response-text">Awaiting your prompt...</div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById('chat-form');
+    const promptInput = document.getElementById('prompt');
+    const responseText = document.getElementById('response-text');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const prompt = promptInput.value;
+      responseText.textContent = "Thinking... 🤔";
+
+      const response = await fetch('/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ prompt }),
+      });
+
+      const result = await response.json();
+      responseText.textContent = result.response;
+      promptInput.value = '';
+    });
+  </script>
+</body>
+</html>
