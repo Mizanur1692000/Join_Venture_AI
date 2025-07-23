@@ -1,0 +1,38 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AI Resume Skill Analyzer</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="main-container">
+    <div class="card">
+      <h1>🚀 AI Resume Skill Analyzer</h1>
+      <p class="subtitle">Upload your resume and let AI extract your skills instantly!</p>
+      
+      <form id="uploadForm" enctype="multipart/form-data">
+        <input type="file" name="resume" accept=".pdf" required />
+        <button type="submit">Analyze Resume</button>
+      </form>
+
+      <div id="result" class="result-box"></div>
+    </div>
+  </div>
+
+  <script>
+    const form = document.getElementById("uploadForm");
+    form.addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const response = await fetch("/analyze", {
+        method: "POST",
+        body: formData
+      });
+      const data = await response.json();
+      document.getElementById("result").innerHTML =
+        `<h3>✅ Skills Found:</h3><ul>${data.skills.map(skill => `<li>${skill}</li>`).join('')}</ul>`;
+    });
+  </script>
+</body>
+</html>
